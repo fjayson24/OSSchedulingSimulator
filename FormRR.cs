@@ -157,7 +157,7 @@ namespace OSProject
                 });
 
                 // Add processes that arrived during execution (before re-queuing current process)
-                while (processIndex < sortedProcesses.Count && sortedProcesses[processIndex].ArrivalTime < currentTime)
+                while (processIndex < sortedProcesses.Count && sortedProcesses[processIndex].ArrivalTime <= currentTime)
                 {
                     if (sortedProcesses[processIndex].RemainingTime > 0 && !queue.Contains(sortedProcesses[processIndex]))
                     {
