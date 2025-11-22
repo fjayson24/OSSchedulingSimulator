@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace OSProject
 {
-    public partial class FormSRT : Form
+    public partial class FormPriority : Form
     {
         private List<Process> processes = new List<Process>();
         private List<GanttChartItem> ganttChart = new List<GanttChartItem>();
 
-        public FormSRT()
+        public FormPriority()
         {
             InitializeComponent();
         }
@@ -25,6 +25,7 @@ namespace OSProject
             public string Name { get; set; }
             public int ArrivalTime { get; set; }
             public int BurstTime { get; set; }
+            public int Priority { get; set; }
             public int RemainingTime { get; set; }
             public int CompletionTime { get; set; }
             public int TurnaroundTime { get; set; }
@@ -45,6 +46,7 @@ namespace OSProject
                 string name = txtProcessName.Text.Trim();
                 int arrival = int.Parse(txtArrivalTime.Text);
                 int burst = int.Parse(txtBurstTime.Text);
+                int priority = int.Parse(txtPriority.Text);
 
                 if (string.IsNullOrEmpty(name))
                 {
@@ -57,6 +59,7 @@ namespace OSProject
                     Name = name,
                     ArrivalTime = arrival,
                     BurstTime = burst,
+                    Priority = priority,
                     RemainingTime = burst
                 });
 
@@ -74,7 +77,7 @@ namespace OSProject
             dgvProcesses.Rows.Clear();
             foreach (var p in processes)
             {
-                dgvProcesses.Rows.Add(p.Name, p.ArrivalTime, p.BurstTime);
+                dgvProcesses.Rows.Add(p.Name, p.ArrivalTime, p.BurstTime, p.Priority);
             }
         }
 
@@ -83,6 +86,7 @@ namespace OSProject
             txtProcessName.Clear();
             txtArrivalTime.Clear();
             txtBurstTime.Clear();
+            txtPriority.Clear();
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -93,14 +97,15 @@ namespace OSProject
                 return;
             }
 
-            CalculateSRT();
+            CalculatePriorityScheduling();
             DisplayResults();
         }
 
-        private void CalculateSRT()
+        private void CalculatePriorityScheduling()
         {
             ganttChart.Clear();
             var sortedProcesses = processes.OrderBy(p => p.ArrivalTime).ToList();
+            var readyQueue = new List<Process>();
             int currentTime = 0;
             int completed = 0;
 
@@ -108,62 +113,45 @@ namespace OSProject
             foreach (var p in sortedProcesses)
             {
                 p.RemainingTime = p.BurstTime;
-                p.CompletionTime = 0;
             }
-
-            string lastProcess = "";
-            int lastStartTime = 0;
 
             while (completed < sortedProcesses.Count)
             {
-                // Get ready processes
-                var readyProcesses = sortedProcesses.Where(p => p.ArrivalTime <= currentTime && p.RemainingTime > 0).ToList();
+                // Add processes that have arrived
+                foreach (var p in sortedProcesses)
+                {
+                    if (p.ArrivalTime <= currentTime && p.RemainingTime > 0 && !readyQueue.Contains(p))
+                    {
+                        readyQueue.Add(p);
+                    }
+                }
 
-                if (readyProcesses.Count == 0)
+                if (readyQueue.Count == 0)
                 {
                     currentTime++;
                     continue;
                 }
 
-                // Select process with shortest remaining time
-                var currentProcess = readyProcesses.OrderBy(p => p.RemainingTime).ThenBy(p => p.ArrivalTime).First();
+                // Select process with highest priority (lower number = higher priority)
+                var currentProcess = readyQueue.OrderBy(p => p.Priority).ThenBy(p => p.ArrivalTime).First();
+                readyQueue.Remove(currentProcess);
 
-                // If process changed, save previous segment
-                if (lastProcess != "" && lastProcess != currentProcess.Name)
+                int startTime = currentTime;
+                currentTime += currentProcess.BurstTime;
+                currentProcess.RemainingTime = 0;
+                currentProcess.CompletionTime = currentTime;
+                completed++;
+
+                ganttChart.Add(new GanttChartItem
                 {
-                    ganttChart.Add(new GanttChartItem
-                    {
-                        ProcessName = lastProcess,
-                        StartTime = lastStartTime,
-                        EndTime = currentTime
-                    });
-                }
+                    ProcessName = currentProcess.Name,
+                    StartTime = startTime,
+                    EndTime = currentTime
+                });
 
-                if (lastProcess != currentProcess.Name)
-                {
-                    lastStartTime = currentTime;
-                }
-
-                lastProcess = currentProcess.Name;
-                currentTime++;
-                currentProcess.RemainingTime--;
-
-                if (currentProcess.RemainingTime == 0)
-                {
-                    currentProcess.CompletionTime = currentTime;
-                    currentProcess.TurnaroundTime = currentProcess.CompletionTime - currentProcess.ArrivalTime;
-                    currentProcess.WaitingTime = currentProcess.TurnaroundTime - currentProcess.BurstTime;
-                    completed++;
-
-                    // Add final segment
-                    ganttChart.Add(new GanttChartItem
-                    {
-                        ProcessName = currentProcess.Name,
-                        StartTime = lastStartTime,
-                        EndTime = currentTime
-                    });
-                    lastProcess = "";
-                }
+                // Calculate turnaround and waiting time
+                currentProcess.TurnaroundTime = currentProcess.CompletionTime - currentProcess.ArrivalTime;
+                currentProcess.WaitingTime = currentProcess.TurnaroundTime - currentProcess.BurstTime;
             }
         }
 
@@ -174,7 +162,7 @@ namespace OSProject
 
             foreach (var p in processes.OrderBy(p => p.ArrivalTime))
             {
-                dgvResults.Rows.Add(p.Name, p.ArrivalTime, p.BurstTime,
+                dgvResults.Rows.Add(p.Name, p.ArrivalTime, p.BurstTime, p.Priority,
                     p.CompletionTime, p.TurnaroundTime, p.WaitingTime);
                 totalWaiting += p.WaitingTime;
                 totalTurnaround += p.TurnaroundTime;
@@ -201,7 +189,7 @@ namespace OSProject
             foreach (var item in ganttChart)
             {
                 int width = (item.EndTime - item.StartTime) * scale;
-                if (width < 20) width = 20;
+                if (width < 30) width = 30;
 
                 Label lbl = new Label
                 {
@@ -211,7 +199,7 @@ namespace OSProject
                     BackColor = GetProcessColor(item.ProcessName),
                     ForeColor = Color.White,
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Font = new Font("Segoe UI", 7, FontStyle.Bold),
+                    Font = new Font("Segoe UI", 8, FontStyle.Bold),
                     BorderStyle = BorderStyle.FixedSingle
                 };
                 panelGantt.Controls.Add(lbl);
@@ -239,3 +227,4 @@ namespace OSProject
         }
     }
 }
+
