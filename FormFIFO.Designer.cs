@@ -69,7 +69,7 @@
             lblArrivalTime.AutoSize = true;
             lblArrivalTime.Location = new Point(240, 70);
             lblArrivalTime.Name = "lblArrivalTime";
-            lblArrivalTime.Text = "Arrival Time:";
+            lblArrivalTime.Text = "Arrival Time (ms):";
 
             // txtArrivalTime
             txtArrivalTime.Location = new Point(330, 67);
@@ -79,7 +79,7 @@
             lblBurstTime.AutoSize = true;
             lblBurstTime.Location = new Point(450, 70);
             lblBurstTime.Name = "lblBurstTime";
-            lblBurstTime.Text = "Burst Time:";
+            lblBurstTime.Text = "Burst Time (ms):";
 
             // txtBurstTime
             txtBurstTime.Location = new Point(530, 67);
@@ -118,8 +118,8 @@
             dgvProcesses.Size = new Size(750, 120);
             dgvProcesses.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProcesses.Columns.Add("Process", "Process");
-            dgvProcesses.Columns.Add("Arrival", "Arrival Time");
-            dgvProcesses.Columns.Add("Burst", "Burst Time");
+            dgvProcesses.Columns.Add("Arrival", "Arrival Time (ms)");
+            dgvProcesses.Columns.Add("Burst", "Burst Time (ms)");
             dgvProcesses.ReadOnly = true;
 
             // dgvResults
@@ -128,11 +128,11 @@
             dgvResults.Size = new Size(750, 120);
             dgvResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvResults.Columns.Add("Process", "Process");
-            dgvResults.Columns.Add("Arrival", "Arrival Time");
-            dgvResults.Columns.Add("Burst", "Burst Time");
-            dgvResults.Columns.Add("Completion", "Completion Time");
-            dgvResults.Columns.Add("Turnaround", "Turnaround Time");
-            dgvResults.Columns.Add("Waiting", "Waiting Time");
+            dgvResults.Columns.Add("Arrival", "Arrival Time (ms)");
+            dgvResults.Columns.Add("Burst", "Burst Time (ms)");
+            dgvResults.Columns.Add("Completion", "Completion Time (ms)");
+            dgvResults.Columns.Add("Turnaround", "Turnaround Time (ms)");
+            dgvResults.Columns.Add("Waiting", "Waiting Time (ms)");
             dgvResults.ReadOnly = true;
 
             // lblAvgWaiting
@@ -140,14 +140,14 @@
             lblAvgWaiting.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblAvgWaiting.Location = new Point(20, 430);
             lblAvgWaiting.Name = "lblAvgWaiting";
-            lblAvgWaiting.Text = "Average Waiting Time: 0.00";
+            lblAvgWaiting.Text = "Average Waiting Time: 0.00 ms";
 
             // lblAvgTurnaround
             lblAvgTurnaround.AutoSize = true;
             lblAvgTurnaround.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblAvgTurnaround.Location = new Point(20, 455);
             lblAvgTurnaround.Name = "lblAvgTurnaround";
-            lblAvgTurnaround.Text = "Average Turnaround Time: 0.00";
+            lblAvgTurnaround.Text = "Average Turnaround Time: 0.00 ms";
 
             // panelGantt
             panelGantt.AutoScroll = true;

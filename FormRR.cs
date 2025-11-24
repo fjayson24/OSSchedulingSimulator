@@ -193,8 +193,8 @@ namespace OSProject
                 totalTurnaround += p.TurnaroundTime;
             }
 
-            lblAvgWaiting.Text = $"Average Waiting Time: {(totalWaiting / processes.Count):F2}";
-            lblAvgTurnaround.Text = $"Average Turnaround Time: {(totalTurnaround / processes.Count):F2}";
+            lblAvgWaiting.Text = $"Average Waiting Time: {(totalWaiting / processes.Count):F2} ms";
+            lblAvgTurnaround.Text = $"Average Turnaround Time: {(totalTurnaround / processes.Count):F2} ms";
 
             DrawGanttChart();
         }
@@ -218,7 +218,7 @@ namespace OSProject
 
                 Label lbl = new Label
                 {
-                    Text = $"{item.ProcessName}\n({item.StartTime}-{item.EndTime})",
+                    Text = $"{item.ProcessName}\n({item.StartTime}-{item.EndTime} ms)",
                     Location = new Point(x, y),
                     Size = new Size(width, height),
                     BackColor = GetProcessColor(item.ProcessName),
@@ -246,8 +246,8 @@ namespace OSProject
             dgvProcesses.Rows.Clear();
             dgvResults.Rows.Clear();
             panelGantt.Controls.Clear();
-            lblAvgWaiting.Text = "Average Waiting Time: 0.00";
-            lblAvgTurnaround.Text = "Average Turnaround Time: 0.00";
+            lblAvgWaiting.Text = "Average Waiting Time: 0.00 ms";
+            lblAvgTurnaround.Text = "Average Turnaround Time: 0.00 ms";
             txtTimeQuantum.Clear();
             ClearInputs();
         }

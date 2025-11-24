@@ -101,7 +101,6 @@ namespace OSProject
             StyleSubButton(button4);
             StyleSubButton(button2);
             StyleSubButton(button5);
-            StyleSubButton(button13);
             StyleSubButton(button8);
             StyleSubButton(button9);
             StyleSubButton(button10);
@@ -185,7 +184,7 @@ namespace OSProject
             if (cpuExpand == false)
             {
                 cpuSchedulingContainer.Height += 10;
-                if (cpuSchedulingContainer.Height >= 313)
+                if (cpuSchedulingContainer.Height >= 260)
                 {
                     cpuTransition.Stop();
                     cpuExpand = true;
@@ -311,7 +310,7 @@ namespace OSProject
 
         private void button3_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new FormPriority());
+            // Removed - Priority scheduling no longer available
         }
 
         private void button7_Click(object sender, EventArgs e)

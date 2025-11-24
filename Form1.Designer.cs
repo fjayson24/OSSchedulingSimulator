@@ -49,8 +49,6 @@
             button2 = new Button();
             panel9 = new Panel();
             button5 = new Button();
-            panel17 = new Panel();
-            button13 = new Button();
             diskSchedulingContainer = new FlowLayoutPanel();
             panel10 = new Panel();
             diskScheduling = new Button();
@@ -85,7 +83,6 @@
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             panel9.SuspendLayout();
-            panel17.SuspendLayout();
             diskSchedulingContainer.SuspendLayout();
             panel10.SuspendLayout();
             panel11.SuspendLayout();
@@ -205,7 +202,6 @@
             cpuSchedulingContainer.Controls.Add(panel5);
             cpuSchedulingContainer.Controls.Add(panel6);
             cpuSchedulingContainer.Controls.Add(panel9);
-            cpuSchedulingContainer.Controls.Add(panel17);
             cpuSchedulingContainer.Location = new Point(3, 65);
             cpuSchedulingContainer.Name = "cpuSchedulingContainer";
             cpuSchedulingContainer.Size = new Size(210, 54);
@@ -326,29 +322,6 @@
             button5.TextAlign = ContentAlignment.MiddleLeft;
             button5.UseVisualStyleBackColor = false;
             button5.Click += button5_Click;
-            // 
-            // panel17
-            // 
-            panel17.Controls.Add(button13);
-            panel17.Location = new Point(3, 263);
-            panel17.Name = "panel17";
-            panel17.Size = new Size(207, 45);
-            panel17.TabIndex = 10;
-            // 
-            // button13
-            // 
-            button13.BackColor = Color.FromArgb(30, 30, 40);
-            button13.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button13.ForeColor = Color.White;
-            button13.ImageAlign = ContentAlignment.MiddleLeft;
-            button13.Location = new Point(0, 0);
-            button13.Name = "button13";
-            button13.Size = new Size(207, 45);
-            button13.TabIndex = 2;
-            button13.Text = "  ⭐    Priority";
-            button13.TextAlign = ContentAlignment.MiddleLeft;
-            button13.UseVisualStyleBackColor = false;
-            button13.Click += button3_Click;
             // 
             // diskSchedulingContainer
             // 
@@ -623,7 +596,6 @@
             panel5.ResumeLayout(false);
             panel6.ResumeLayout(false);
             panel9.ResumeLayout(false);
-            panel17.ResumeLayout(false);
             diskSchedulingContainer.ResumeLayout(false);
             panel10.ResumeLayout(false);
             panel11.ResumeLayout(false);
@@ -682,7 +654,5 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private Panel panelChildForm;
         private Button btnClose;
-        private Panel panel17;
-        private Button button13;
     }
 }
